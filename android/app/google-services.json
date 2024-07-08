@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "675044749792",
+    "firbase_url": "https://console.firebase.google.com/project/imontir-3bed8/database/imontir-3bed8-default-rtdb/data/~2F?hl=id",
+    "project_id": "imontir-3bed8",
+    "storage_bucket": "imontir-3bed8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675044749792:android:c8a7278a728de98c977b85",
+        "android_client_info": {
+          "package_name": "com.example.imontir"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHmjERkGmXm1jTXgMnFiQXMqkLQSq4_mA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
