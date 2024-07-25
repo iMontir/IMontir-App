@@ -1,21 +1,31 @@
 # IMontir
 
-IMontir adalah sistem IoT yang terhubung dengan aplikasi Flutter untuk pemantauan dan pengelolaan distribusi air pada sistem irigasi. Sistem ini mendeteksi ketinggian air pada cabang irigasi dan mengontrol pompa air untuk mengalirkan air dari cabang irigasi yang lebih besar ke cabang yang membutuhkan.
+IMontir adalah sebuah proyek Internet of Things (IoT) yang terhubung dengan aplikasi Flutter untuk memantau dan mengendalikan distribusi air pada sistem irigasi. Aplikasi ini mampu mendeteksi ketinggian air pada suatu cabang irigasi dan menghidupkan pompa air untuk mengaliri air dari cabang irigasi yang lebih besar. Data disimpan dan dikelola menggunakan Firebase.
 
-## Fitur
+## Fitur Utama
 
-- **Pemantauan Ketinggian Air:** Menggunakan sensor ultrasonik untuk mendeteksi ketinggian air pada cabang irigasi.
-- **Kontrol Pompa Air:** Menghidupkan dan mematikan pompa air secara otomatis berdasarkan kebutuhan distribusi air.
-- **Integrasi IoT:** Menggunakan ESP32 untuk mengirim data sensor ke Firebase.
-- **Aplikasi Flutter:** Antarmuka pengguna untuk memantau ketinggian air dan status pompa air secara real-time.
-- **Database Firebase:** Menyimpan data ketinggian air dan status pompa air.
+1. **Deteksi Ketinggian Air:** Menggunakan sensor ultrasonik yang terintegrasi dengan ESP32 untuk mendeteksi ketinggian air di cabang irigasi.
+2. **Kendali Pompa Air:** Menghidupkan dan mematikan pompa air berdasarkan data ketinggian air yang terdeteksi.
+3. **Pengelolaan Cabang:** Menambahkan dan mengelola cabang irigasi melalui aplikasi.
+4. **Notifikasi:** Memberikan notifikasi real-time terkait status ketinggian air dan operasi pompa.
+5. **Riwayat Pompa:** Menyimpan dan menampilkan riwayat hidup dan matinya pompa air.
 
-## Arsitektur Sistem
+## Struktur Aplikasi
 
-1. **Sensor Ultrasonik:** Mengukur ketinggian air pada cabang irigasi.
-2. **ESP32:** Mengintegrasikan sensor ultrasonik dengan Firebase.
-3. **Firebase:** Menyimpan data ketinggian air dan status pompa.
-4. **Aplikasi Flutter:** Antarmuka pengguna untuk pemantauan dan pengendalian.
+1. **Splash Screen:** Tampilan awal saat pertama kali membuka aplikasi.
+2. **Beranda:** Tiga fitur utama:
+   - **Tambah Cabang:** Menambahkan cabang irigasi baru.
+   - **Cabang No.:** Melihat diagram ketinggian air dan mengontrol pompa air untuk setiap cabang.
+   - **Notifikasi:** Melihat notifikasi dari alat dan membuka Tampilan Cabang No.
+3. **Tampilan Notifikasi:** Menampilkan notifikasi dari alat untuk ketinggian air pada cabang irigasi yang kurang dari permintaan.
+4. **Tampilan Cabang No.:** Menampilkan diagram ketinggian air dan mengontrol pompa air untuk cabang irigasi tersebut, serta melihat riwayat hidup dan matinya pompa air.
+
+## Teknologi yang Digunakan
+
+- **Flutter:** Framework untuk pengembangan aplikasi mobile.
+- **ESP32:** Mikrokontroler untuk mengintegrasikan sensor ultrasonik dan terhubung dengan Firebase.
+- **Firebase:** Database untuk menyimpan dan mengelola data ketinggian air dan status pompa.
+- **Sensor Ultrasonik:** Untuk mendeteksi ketinggian air di cabang irigasi.
 
 ## Instalasi
 
