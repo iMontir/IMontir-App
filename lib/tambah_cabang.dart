@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class TambahCabangPage extends StatelessWidget {
   final TextEditingController namaCabangController = TextEditingController();
   final TextEditingController idCabangController = TextEditingController();
+  final TextEditingController BatasKetinggianAirController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class TambahCabangPage extends StatelessWidget {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Nama Cabang',
+                    'Nama Mesin',
                     style: TextStyle(
                       color: Color(0xFF0D9D57),
                       fontSize: 16,
@@ -57,23 +59,23 @@ class TambahCabangPage extends StatelessWidget {
                 TextField(
                   controller: namaCabangController,
                   decoration: InputDecoration(
-                    hintText: 'Masukan Nama Cabang',
+                    hintText: 'Masukan Nama Mesin',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                      borderRadius: BorderRadius.circular(13.0),
                       borderSide: BorderSide(
                         color: Color(0xFF0D9D57),
                         width: 2.0,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                      borderRadius: BorderRadius.circular(13.0),
                       borderSide: BorderSide(
                         color: Color(0xFF0D9D57),
                         width: 2.0,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                      borderRadius: BorderRadius.circular(13.0),
                       borderSide: BorderSide(
                         color: Color(0xFF0D9D57),
                         width: 2.0,
@@ -89,7 +91,7 @@ class TambahCabangPage extends StatelessWidget {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'ID Cabang',
+                    'Kode Mesin',
                     style: TextStyle(
                       color: Color(0xFF0D9D57),
                       fontSize: 16,
@@ -102,29 +104,109 @@ class TambahCabangPage extends StatelessWidget {
                   controller: idCabangController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    hintText: 'Masukan ID Cabang',
+                    hintText: 'Masukan Kode Mesin',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                      borderRadius: BorderRadius.circular(13.0),
                       borderSide: BorderSide(
                         color: Color(0xFF0D9D57),
                         width: 2.0,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                      borderRadius: BorderRadius.circular(13.0),
                       borderSide: BorderSide(
                         color: Color(0xFF0D9D57),
                         width: 2.0,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                      borderRadius: BorderRadius.circular(13.0),
                       borderSide: BorderSide(
                         color: Color(0xFF0D9D57),
                         width: 2.0,
                       ),
                     ),
                   ),
+                ),
+              ],
+            ),
+            SizedBox(height: 30),
+            Column(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Batas Ketinggian Air',
+                    style: TextStyle(
+                      color: Color(0xFF0D9D57),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    // TextField untuk input manual
+                    Expanded(
+                      child: TextField(
+                        controller: BatasKetinggianAirController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: 'Masukan Batas Ketinggian Air',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(13.0),
+                            borderSide: BorderSide(
+                              color: Color(0xFF0D9D57),
+                              width: 2.0,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(13.0),
+                            borderSide: BorderSide(
+                              color: Color(0xFF0D9D57),
+                              width: 2.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(13.0),
+                            borderSide: BorderSide(
+                              color: Color(0xFF0D9D57),
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    // Button untuk menu dropdown
+                    PopupMenuButton<int>(
+                      onSelected: (value) {
+                        // Update TextField dengan value + ' cm'
+                        BatasKetinggianAirController.text = '$value cm';
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return List.generate(61, (index) {
+                          return PopupMenuItem<int>(
+                            value: index,
+                            child: Text('$index cm'),
+                          );
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                        decoration: BoxDecoration(
+                          color: Color(0xFF0D9D57),
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        child: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.white,
+                        ),
+                      ),
+                      color: Colors.white,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -163,15 +245,30 @@ class TambahCabangPage extends StatelessWidget {
   Future<void> tambahData(BuildContext context) async {
     String namaCabang = namaCabangController.text.trim();
     String idCabang = idCabangController.text.trim();
+    String batasKetinggianAir = BatasKetinggianAirController.text.replaceAll(' cm', '');
+
 
     // Menghapus spasi dan karakter khusus dari nama cabang
     String cleanedNamaCabang = namaCabang.replaceAll(RegExp(r'[^\w\s]+'), '');
 
+    // Mengkonversi batas ketinggian air ke integer
+    int? cekbatasKetinggianAir= int.tryParse(batasKetinggianAir);
+
     if (cleanedNamaCabang.isEmpty || idCabang.isEmpty) {
       // Menampilkan pesan kesalahan jika nama atau id cabang kosong
-      showDialog(
+      await showDialog(
         context: context,
         builder: (BuildContext context) {
+          // Menyimpan referensi ke context dialog
+          BuildContext dialogContext = context;
+
+          // Menutup dialog secara otomatis setelah 1 detik
+          Future.delayed(Duration(seconds: 1), () {
+            if (Navigator.canPop(dialogContext)) {
+              Navigator.pop(dialogContext);
+            }
+          });
+
           return AlertDialog(
             backgroundColor: Colors.white,
             content: Column(
@@ -184,7 +281,7 @@ class TambahCabangPage extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'Nama dan ID Cabang harus diisi!',
+                  'Nama dan ID Mesin harus diisi!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
@@ -196,12 +293,58 @@ class TambahCabangPage extends StatelessWidget {
           );
         },
       );
+    } else if (cekbatasKetinggianAir == null || cekbatasKetinggianAir > 60) {
+    // Menampilkan pesan kesalahan jika batas ketinggian air tidak valid atau lebih dari 60 cm
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // Menyimpan referensi ke context dialog
+          BuildContext dialogContext = context;
+
+          // Menutup dialog secara otomatis setelah 1 detik
+          Future.delayed(Duration(seconds: 1), () {
+            if (Navigator.canPop(dialogContext)) {
+              Navigator.pop(dialogContext);
+            }
+          });
+
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.error,
+                color: Colors.red,
+                size: 64,
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Batas Ketinggian Air tidak boleh lebih dari 60 cm!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
     } else {
       try {
+         // Mengambil instance Firestore
         FirebaseFirestore firestore = FirebaseFirestore.instance;
-        DatabaseReference realtimeDatabase = FirebaseDatabase(
-          databaseURL: 'https://imontir-3bed8-default-rtdb.asia-southeast1.firebasedatabase.app'
-        ).reference();
+        
+        // Menggunakan FirebaseDatabase.instanceFor untuk URL database kustom
+        final FirebaseDatabase realtimeDatabase = FirebaseDatabase.instanceFor(
+          app: Firebase.app(), // Pastikan Firebase sudah diinisialisasi di main.dart
+          databaseURL: 'https://imontir-3bed8-default-rtdb.asia-southeast1.firebasedatabase.app',
+        );
+
+        // Mendapatkan referensi ke root database
+        DatabaseReference dbRef = realtimeDatabase.ref();
 
         // Check if namaCabang or idCabang already exists
         QuerySnapshot querySnapshot = await firestore.collection('cabang')
@@ -212,11 +355,22 @@ class TambahCabangPage extends StatelessWidget {
             .where('idCabang', isEqualTo: idCabang)
             .get();
 
-        if (querySnapshot.docs.isNotEmpty || idQuerySnapshot.docs.isNotEmpty) {
-          // Menampilkan pesan kesalahan jika nama atau id cabang sudah ada
+        // Validasi panjang karakter namaCabang
+        if (cleanedNamaCabang.length > 20) {
+          // Menampilkan pesan kesalahan jika namaCabang lebih dari 20 karakter
           showDialog(
             context: context,
             builder: (BuildContext context) {
+              // Menyimpan referensi ke context dialog
+              BuildContext dialogContext = context;
+
+              // Menutup dialog secara otomatis setelah 1 detik
+              Future.delayed(Duration(seconds: 1), () {
+                if (Navigator.canPop(dialogContext)) {
+                  Navigator.pop(dialogContext);
+                }
+              });
+
               return AlertDialog(
                 backgroundColor: Colors.white,
                 content: Column(
@@ -229,7 +383,88 @@ class TambahCabangPage extends StatelessWidget {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'Nama atau ID Cabang sudah ada!',
+                      'Nama Mesin tidak boleh lebih dari 20 karakter!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+          return; // Menghentikan proses jika namaCabang lebih dari 20 karakter
+        }
+        
+        if (querySnapshot.docs.isNotEmpty) {
+          // Menampilkan pesan kesalahan jika nama cabang sudah ada
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              // Menyimpan referensi ke context dialog
+              BuildContext dialogContext = context;
+
+              // Menutup dialog secara otomatis setelah 1 detik
+              Future.delayed(Duration(seconds: 1), () {
+                if (Navigator.canPop(dialogContext)) {
+                  Navigator.pop(dialogContext);
+                }
+              });
+
+              return AlertDialog(
+                backgroundColor: Colors.white,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.error,
+                      color: Colors.red,
+                      size: 64,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Nama Mesin sudah ada!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        } else if (idQuerySnapshot.docs.isNotEmpty) {
+          // Menampilkan pesan kesalahan jika ID cabang sudah ada
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              // Menyimpan referensi ke context dialog
+              BuildContext dialogContext = context;
+
+              // Menutup dialog secara otomatis setelah 1 detik
+              Future.delayed(Duration(seconds: 1), () {
+                if (Navigator.canPop(dialogContext)) {
+                  Navigator.pop(dialogContext);
+                }
+              });
+
+              return AlertDialog(
+                backgroundColor: Colors.white,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.error,
+                      color: Colors.red,
+                      size: 64,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Kode Mesin sudah ada!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18,
@@ -256,17 +491,27 @@ class TambahCabangPage extends StatelessWidget {
           });
 
           // Menambahkan data ke Realtime Database berdasarkan ID cabang
-          await realtimeDatabase.child('sensor_$idCabang').set({
-            'debit_air': 0,
+          await realtimeDatabase.ref().child('sensor_$idCabang').set({
             'ketinggian_air': 0,
-            'batas_ketinggian_air' : 10,
+            'batas_ketinggian_air' : batasKetinggianAir,
             'status_pompa' : false,
+            'fiturOtomatis' : false,
           });
 
           // Menampilkan dialog berhasil
           await showDialog(
             context: context,
             builder: (BuildContext context) {
+              // Menyimpan referensi ke context dialog
+              BuildContext dialogContext = context;
+
+              // Menutup dialog secara otomatis setelah 1 detik
+              Future.delayed(Duration(seconds: 1), () {
+                if (Navigator.canPop(dialogContext)) {
+                  Navigator.pop(dialogContext);
+                }
+              });
+
               return AlertDialog(
                 backgroundColor: Colors.white,
                 content: Column(
@@ -279,11 +524,11 @@ class TambahCabangPage extends StatelessWidget {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'Berhasil\nMenambahkan Cabang',
+                      'Berhasil\nMenambahkan Mesin',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
@@ -301,6 +546,16 @@ class TambahCabangPage extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context) {
+            // Menyimpan referensi ke context dialog
+            BuildContext dialogContext = context;
+
+            // Menutup dialog secara otomatis setelah 1 detik
+            Future.delayed(Duration(seconds: 1), () {
+              if (Navigator.canPop(dialogContext)) {
+                Navigator.pop(dialogContext);
+              }
+            });
+            
             return AlertDialog(
               backgroundColor: Colors.white,
               content: Column(

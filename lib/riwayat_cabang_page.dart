@@ -50,10 +50,10 @@ class RiwayatPompaAir extends StatelessWidget {
                     List<Map<String, dynamic>> cardData = [
                       for (var doc in data)
                         {
-                          'tanggal': DateFormat('dd MMMM yyyy').format(
+                          'tanggal': DateFormat('dd MMMM yyyy', 'id').format(
                               (doc['tanggal_waktu'] as Timestamp).toDate()),
-                          'waktu': DateFormat('HH:mm wib').format(
-                              (doc['tanggal_waktu'] as Timestamp).toDate()),
+                          'waktu': DateFormat('HH:mm', 'id').format(
+                              (doc['tanggal_waktu'] as Timestamp).toDate()) + ' WIB',
                           'status': (doc['status_pompa_air'] == true)
                               ? 'Hidup'
                               : 'Mati',
@@ -105,7 +105,7 @@ class RiwayatPompaAir extends StatelessWidget {
                 ),
                 Text(
                   item['tanggal'],
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
                 ),
               ],
             ),

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'cabang_page.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 
 class NotifikasiPage extends StatefulWidget {
   @override
@@ -43,27 +43,39 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
   }
 
   void fetchSensorData(String branchName, String branchId) {
-    final FirebaseDatabase database = FirebaseDatabase(
-        databaseURL: 'https://imontir-3bed8-default-rtdb.asia-southeast1.firebasedatabase.app');
+    // Menggunakan FirebaseDatabase.instanceFor untuk URL database kustom
+    final FirebaseDatabase database = FirebaseDatabase.instanceFor(
+      app: Firebase.app(), // Pastikan Firebase sudah diinisialisasi di main.dart
+      databaseURL: 'https://imontir-3bed8-default-rtdb.asia-southeast1.firebasedatabase.app',
+    );
+
+    // Mengacu pada referensi database untuk sensor berdasarkan branchId
     DatabaseReference sensorRef = database.ref().child('sensor_$branchId');
 
+    // Mendengarkan perubahan pada data sensor di database
     sensorRef.onValue.listen((event) {
       if (event.snapshot.value != null) {
-        final data = Map<String, dynamic>.from(event.snapshot.value as Map);
+        // Pastikan casting tipe data dari snapshot ke Map<String, dynamic>
+        final data = Map<String, dynamic>.from(event.snapshot.value as Map<dynamic, dynamic>);
+
+        // Parsing data sensor dari database
         double ketinggianAir = double.parse(data['ketinggian_air'].toString());
         double batasKetinggianAir = double.parse(data['batas_ketinggian_air'].toString());
 
+        // Memperbarui state dengan data yang diterima
         setState(() {
           branchesData[branchId]!['ketinggianAir'] = ketinggianAir;
           branchesData[branchId]!['batasKetinggianAir'] = batasKetinggianAir;
         });
 
+        // Menampilkan notifikasi jika ketinggian air di bawah batas
         if (ketinggianAir < batasKetinggianAir) {
           showNotification(branchName, ketinggianAir);
         }
       }
     });
   }
+
 
   Future<void> showNotification(String branchName, double ketinggianAir) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
